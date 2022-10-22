@@ -2,15 +2,14 @@ package test.graham.driver;
 
 import test.graham.controllers.BookController;
 import test.graham.controllers.EmployeeController;
+import test.graham.controllers.TicketController;
 import test.graham.handlers.*;
 import test.graham.handlers.HelloHandler;
 import test.graham.repositories.BookDAOPostgres;
 import test.graham.repositories.EmployeeDAOPostgres;
-import test.graham.services.BookService;
-import test.graham.services.BookServiceImpl;
+import test.graham.repositories.TicketDAOPostgres;
+import test.graham.services.*;
 import io.javalin.Javalin;
-import test.graham.services.EmployeeService;
-import test.graham.services.EmployeeServiceImpl;
 
 public class Driver {
 
@@ -18,46 +17,61 @@ public class Driver {
     // If you make a static object of your Service, you can use this single instance throughout your application
     public static BookService bookService = new BookServiceImpl(new BookDAOPostgres());
     public static EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOPostgres());
+    public static TicketService ticketService = new TicketServiceImpl(new TicketDAOPostgres());
     //public static currentLoggedEmployee;
     public static void main(String[] args) {
         Javalin app = Javalin.create();
 
-        HelloHandler helloHandler = new HelloHandler();
-//        GetBookByIdHandler getBookByIdHandler = new GetBookByIdHandler();
-//        CreateBookHandler createBookHandler = new CreateBookHandler();
-//        UpdateBookHandler updateBookHandler = new UpdateBookHandler();
-//        DeleteBookHandler deleteBookHandler = new DeleteBookHandler();
-        BookController bookController = new BookController();
-
+//        HelloHandler helloHandler = new HelloHandler();
+////        GetBookByIdHandler getBookByIdHandler = new GetBookByIdHandler();
+////        CreateBookHandler createBookHandler = new CreateBookHandler();
+////        UpdateBookHandler updateBookHandler = new UpdateBookHandler();
+////        DeleteBookHandler deleteBookHandler = new DeleteBookHandler();
+//        BookController bookController = new BookController();
         EmployeeController employeeController = new EmployeeController();
+        TicketController ticketController = new TicketController();
 
-
-        app.get("/hello", helloHandler);
-        app.get("/books/{id}", bookController.getBookByIdHandler);
-
+//
+//        app.get("/hello", helloHandler);
+//        app.get("/books/{id}", bookController.getBookByIdHandler);
+//
 
         //////////////////////////////////
-        //app.post("/signup", signupHandler);
 
         //app.get("/login", employeeController.loginHandler);
-        app.post("/createUser", employeeController.createUser);
-        app.get("/employees", employeeController.getAllEmployees);
+//      TO DO:
+//
+//      CREATE LOGIN
+//
+        app.post("/createUser", employeeController.createUser); // submit Json post request to add user
+        app.get("/employees", employeeController.getAllEmployees); // check to see all users
 
 
 
 
         /////////////////////////////////////
+        //create ticket
+
+
+        // view tickets
+        app.get("/tickets", ticketController.getAllTickets); // check to see all users
+
+        // admin view tickets
+
+
+        // admin approve/deny tickets
 
 
 
 
-        app.get("/books", bookController.getAllBooks);
 
-        app.post("/books", bookController.createBook);
-
-        app.put("/books", bookController.updateBookHandler);
-
-        app.delete("/books/{id}", bookController.deleteBookHandler);
+//        app.get("/books", bookController.getAllBooks);
+//
+//        app.post("/books", bookController.createBook);
+//
+//        app.put("/books", bookController.updateBookHandler);
+//
+//        app.delete("/books/{id}", bookController.deleteBookHandler);
 
 
 
