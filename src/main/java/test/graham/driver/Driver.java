@@ -54,9 +54,9 @@ public class Driver {
 
 
         // view tickets
-        app.get("/tickets", ticketController.getAllTickets); // check to see all users
+        app.get("/tickets", ticketController.getAllTickets); // check to see all tickets
 
-        // admin view tickets
+        // admin view pending tickets
 
 
         // admin approve/deny tickets
