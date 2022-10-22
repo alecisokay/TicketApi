@@ -17,6 +17,7 @@ public interface EmployeeDAO {
 //    //read
 //    Book getBookById(int id);
 //    List<Book> getAllBooks();
+    List<Employee> getAllEmployees();
 //
 //    //update
 //    Book updateBook(Book book);

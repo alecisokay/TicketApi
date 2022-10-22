@@ -20,6 +20,15 @@ public class EmployeeController {
 //        ctx.status(201); //This is a status code that will tell us how things went
 //        ctx.result(bookJson);
 //    };
+    public Handler createUser = (ctx) ->{
+        String json = ctx.body();
+        Gson gson = new Gson();
+        Employee employee = gson.fromJson(json, Employee.class);
+        Employee registeredEmployee = Driver.employeeService.createEmployee(employee);
+        String employeeJson = gson.toJson(registeredEmployee);
+        ctx.status(201); //This is a status code that will tell us how things went
+        ctx.result(employeeJson);
+    };
 //
 //    public Handler getBookByIdHandler = (ctx) ->{
 //        int id = Integer.parseInt(ctx.pathParam("id"));//This will take what value was in the {id} and turn it into an int for us to use
@@ -29,12 +38,13 @@ public class EmployeeController {
 //        ctx.result(json);
 //    };
 //
-//    public Handler getAllBooks = (ctx) ->{
-//        List<Book> books = Driver.bookService.getAllBooks();
-//        Gson gson = new Gson();
-//        String json = gson.toJson(books);
-//        ctx.result(json);
-//    };
+    public Handler getAllEmployees = (ctx) ->{
+        List<Employee> employee = Driver.employeeService.getAllEmployees();
+        Gson gson = new Gson();
+        String json = gson.toJson(employee);
+        ctx.result(json);
+        //ctx.result("this is the employee route");
+    };
 //
 //    public Handler updateBookHandler = (ctx) ->{
 //        String bookJSON = ctx.body();

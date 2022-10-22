@@ -22,7 +22,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 
     @Override
     public List<Employee> getAllEmployees() {
-        //return this.employeeDAO.getAllEmployees();
-        return null;
+        return this.employeeDAO.getAllEmployees();
+        //return null;
     }
 }
