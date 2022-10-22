@@ -44,6 +44,7 @@ public class Driver {
 //      CREATE LOGIN
 //
         app.post("/createUser", employeeController.createUser); // submit Json post request to add user
+        app.get("/login", employeeController.loginHandler);
         app.get("/employees", employeeController.getAllEmployees); // check to see all users
 
 

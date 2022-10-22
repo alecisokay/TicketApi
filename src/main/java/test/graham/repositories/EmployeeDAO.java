@@ -15,8 +15,7 @@ public interface EmployeeDAO {
 
 //
 //    //read
-//    Book getBookById(int id);
-//    List<Book> getAllBooks();
+    Employee getEmployeeByEmailPassword(String email, String passwd);
     List<Employee> getAllEmployees();
 //
 //    //update

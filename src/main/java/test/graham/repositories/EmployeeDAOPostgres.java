@@ -42,6 +42,41 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
         return null;
     }
 
+
+
+    @Override
+    public Employee getEmployeeByEmailPassword(String email, String passwd) {
+        try(Connection connection = ConnectionFactory.getConnection()){
+            //String sql = "select * from books where id = ?";
+            String sql = "select * from employee where email = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            // The class PreparedStatement has a method called prepareStatement (no d) that takes in a string
+            ps.setString(1, email);
+            System.out.println(email);
+            System.out.println(passwd);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            // if passwd == employee.getPasswd{};
+            Employee employee = new Employee();
+            employee.setId(rs.getInt("id"));
+            employee.setFname(rs.getString("fname"));
+            employee.setLname(rs.getString("lname"));
+            employee.setEmail(rs.getString("email"));
+            employee.setPasswd(rs.getString("passwd"));
+            employee.setIsAdmin(rs.getInt("isAdmin"));
+
+
+            return employee;
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("something went wrong checking the email");
+            return null;
+        }
+    }
+
     @Override
     public List<Employee> getAllEmployees() {
         //return null;

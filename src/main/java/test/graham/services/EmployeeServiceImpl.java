@@ -21,6 +21,22 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
+    public Employee getEmployeeByEmailPassword(String email, String passwd) {
+//        if(book.getTitle().length() == 0){
+//            throw new RuntimeException("Book's title cannot be empty");
+//        }
+//        if(book.getAuthor().length() == 0){
+//            throw new RuntimeException("Book's authors cannot be empty");
+//        }
+        return this.employeeDAO.getEmployeeByEmailPassword(email, passwd);
+    }
+
+//    @Override
+//    public Employee getEmployeeByEmailPassword(String email, String password) {
+//        return this.employeeDAO.getEmployeeByEmailPassword(email, password);
+//    }
+
+    @Override
     public List<Employee> getAllEmployees() {
         return this.employeeDAO.getAllEmployees();
         //return null;

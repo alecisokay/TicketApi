@@ -54,6 +54,33 @@ public class EmployeeController {
 //        String json = gson.toJson(updateBook);
 //        ctx.result(json);
 //    };
+
+   public Handler loginHandler = (ctx) ->{
+        String employeeJSON = ctx.body();
+        String email = "testUser@mail.com";
+        String passwd = "12345";
+
+//       // creates an employee object from the Json we pass in from the ctx.body params
+//        Employee employee = gson.fromJson(employeeJSON, Employee.class);
+//
+//       // executes our login function (Book Updatabook = Employee loginEmployee function) -> employeeService.loginEmployee(employee)
+////        Book updateBook = Driver.bookService.updateBook(book);
+//       Employee checkEmployee = Driver.employeeService.getEmployeeByEmailPassword(employee);
+//       // makes a json string that is comprised of the result of the return value of out employeeService.loginEmployee(employee)
+////        String json = gson.toJson(updateBook);
+//       String json = gson.toJson(checkEmployee);
+//       ctx.result(json);
+       //System.out.println(email);
+       Employee employee = Driver.employeeService.getEmployeeByEmailPassword(email, passwd);
+       // creates Gson Object\
+       Gson gson = new Gson();
+       String json = gson.toJson(employee);
+       ctx.result(json);
+
+
+    };
+
+
 //
 //
 //    public Handler deleteBookHandler = (ctx) ->{
