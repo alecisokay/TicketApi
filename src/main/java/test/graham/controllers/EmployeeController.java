@@ -3,6 +3,9 @@ package test.graham.controllers;
 import com.google.gson.Gson;
 import test.graham.driver.Driver;
 import test.graham.entities.Employee;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.http.Handler;
 
 import java.util.List;
@@ -58,7 +61,14 @@ public class EmployeeController {
    public Handler loginHandler = (ctx) ->{
         String employeeJSON = ctx.body();
         String email = "testUser@mail.com";
-        String passwd = "12345";
+        String passwd = "1234";
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(employeeJSON);
+        System.out.println(jsonNode.get("email"));
+        //String emails = jsonNode.findValue("email").textValue();
+        //String passwds = jsonNode.findValue("passwd").textValue();
+       System.out.println(email);
+       System.out.println(passwd);
 
 //       // creates an employee object from the Json we pass in from the ctx.body params
 //        Employee employee = gson.fromJson(employeeJSON, Employee.class);
