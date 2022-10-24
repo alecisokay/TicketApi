@@ -7,4 +7,6 @@ public interface TicketService {
     Ticket createTicket(Ticket ticket);
 
     List<Ticket> getAllTickets();
+
+    List<Ticket> getTicketByEmail(String email);
 }

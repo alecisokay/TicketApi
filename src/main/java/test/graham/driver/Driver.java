@@ -3,6 +3,7 @@ package test.graham.driver;
 import test.graham.controllers.BookController;
 import test.graham.controllers.EmployeeController;
 import test.graham.controllers.TicketController;
+import test.graham.entities.Employee;
 import test.graham.handlers.*;
 import test.graham.handlers.HelloHandler;
 import test.graham.repositories.BookDAOPostgres;
@@ -18,7 +19,7 @@ public class Driver {
     public static BookService bookService = new BookServiceImpl(new BookDAOPostgres());
     public static EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOPostgres());
     public static TicketService ticketService = new TicketServiceImpl(new TicketDAOPostgres());
-    //public static currentLoggedEmployee;
+    public static Employee currentLoggedEmployee = null;
     public static void main(String[] args) {
         Javalin app = Javalin.create();
 
@@ -56,6 +57,7 @@ public class Driver {
 
         // view tickets
         app.get("/tickets", ticketController.getAllTickets); // check to see all tickets
+        app.post("/tickets", ticketController.createTicket); // check to see all tickets
 
         // admin view pending tickets
 

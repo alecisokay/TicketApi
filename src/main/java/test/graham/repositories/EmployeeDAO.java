@@ -10,7 +10,6 @@ public interface EmployeeDAO {
     //Interfaces are similar to standard classes, but you cant have ANY concrete methods in them
 
     //create
-    //Book createBook(Book book);
     Employee createEmployee(Employee employee);
 
 //

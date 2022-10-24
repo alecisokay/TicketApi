@@ -16,7 +16,7 @@ public class TicketDAOPostgres implements TicketDAO{
         try(Connection connection = ConnectionFactory.getConnection()){
             // Here is the unfun thing about JDBC, you have to write SQL statements in Java
             // I recommend putting in comments the SQL command you are trying to execute
-            //INSERT INTO books VALUES (DEFAULT, 'Great Gatsby', 'F. Scott Fitts Jerald', 0);
+            //INSERT INTO tickets VALUES (DEFAULT, 'descriptin', 'createdBy', 'appvrovedBy', amount, status);
             String sql = "insert into tickets values(default, ?, ? , ?, ?, ?)";
             // The only thing in the sql String that isnt "just a string" are the question marks
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -34,6 +34,8 @@ public class TicketDAOPostgres implements TicketDAO{
             resultSet.next();//you need to move the cursor to the first valid record, or you will get a null response
             int generatedKey = resultSet.getInt("id");
             ticket.setId(generatedKey);
+            // check if ticket is doing something
+            System.out.println(ticket);
             return ticket;
         }
         catch (SQLException e){
@@ -50,6 +52,39 @@ public class TicketDAOPostgres implements TicketDAO{
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             ResultSet rs = preparedStatement.executeQuery();
+
+            List<Ticket> ticketList = new ArrayList();
+
+            while(rs.next()){
+                Ticket ticket = new Ticket();
+                ticket.setId(rs.getInt("id"));
+                ticket.setDescription(rs.getString("description"));
+                ticket.setCreatedBy(rs.getString("createdBy"));
+                ticket.setApprovedBy(rs.getString("approvedBy"));
+                ticket.setAmount(rs.getInt("amount"));
+                ticket.setStatus(rs.getInt("status"));
+                ticketList.add(ticket);
+            }
+            return ticketList;
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Ticket> getTicketByEmail(String email) {
+        try(Connection connection = ConnectionFactory.getConnection()){
+            String sql = "select * from tickets where createdBy = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, email);
+
+            System.out.println(email);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
 
             List<Ticket> ticketList = new ArrayList();
 

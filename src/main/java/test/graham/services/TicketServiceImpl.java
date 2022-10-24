@@ -12,7 +12,7 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     public Ticket createTicket(Ticket ticket) {
-        return null;
+        return this.ticketDAO.createTicket(ticket);
     }
 
     @Override
@@ -20,4 +20,11 @@ public class TicketServiceImpl implements TicketService{
         return this.ticketDAO.getAllTickets();
         //return null;
     }
+
+    @Override
+    public List<Ticket> getTicketByEmail(String email) {
+        return this.ticketDAO.getTicketByEmail(email);
+
+    }
+
 }

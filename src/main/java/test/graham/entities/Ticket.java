@@ -9,6 +9,19 @@ public class Ticket {
     private int amount; //defaults to 0
     private int status; // defualts to 0 - 0=pending, 1=approved, 2= denied
 
+
+    public Ticket() {
+    }
+
+    public Ticket(int id, String description, String createdBy, String approvedBy, int amount, int status) {
+        this.id = id;
+        this.description = description;
+        this.createdBy = createdBy;
+        this.approvedBy = approvedBy;
+        this.amount = amount;
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +

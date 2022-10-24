@@ -16,7 +16,7 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
         try(Connection connection = ConnectionFactory.getConnection()){
             // Here is the unfun thing about JDBC, you have to write SQL statements in Java
             // I recommend putting in comments the SQL command you are trying to execute
-            //INSERT INTO books VALUES (DEFAULT, 'Great Gatsby', 'F. Scott Fitts Jerald', 0);
+            //INSERT INTO employee VALUES (DEFAULT, 'fname', 'lname', 'email', 'passwd', isAdmin);
             String sql = "insert into employee values(default, ?, ? , ?, ?, ?)";
             // The only thing in the sql String that isnt "just a string" are the question marks
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -34,6 +34,9 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
             resultSet.next();//you need to move the cursor to the first valid record, or you will get a null response
             int generatedKey = resultSet.getInt("id");
             employee.setId(generatedKey);
+
+
+            System.out.println(employee);
             return employee;
         }
         catch (SQLException e){
@@ -67,7 +70,7 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
             employee.setPasswd(rs.getString("passwd"));
             employee.setIsAdmin(rs.getInt("isAdmin"));
 
-
+            System.out.println(employee);
             return employee;
 
         }
@@ -128,6 +131,7 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
                 employee.setFname(rs.getString("fname"));
                 employee.setLname(rs.getString("lname"));
                 employee.setEmail(rs.getString("email"));
+                employee.setIsAdmin(rs.getInt("isAdmin"));
                 employeeList.add(employee);
             }
             return employeeList;

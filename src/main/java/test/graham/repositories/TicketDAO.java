@@ -1,14 +1,13 @@
 package test.graham.repositories;
 
 import test.graham.entities.Ticket;
+//import test.graham.entities.Employee;
 import java.util.List;
 
-public interface TicketDAO {
+public interface TicketDAO{
 
-    //Interfaces are similar to standard classes, but you cant have ANY concrete methods in them
 
     //create
-    //Book createBook(Book book);
     Ticket createTicket(Ticket ticket);
 
     //
@@ -16,6 +15,8 @@ public interface TicketDAO {
 //    Book getBookById(int id);
 //    List<Book> getAllBooks();
     List<Ticket> getAllTickets();
+
+    List<Ticket> getTicketByEmail(String email);
 //
 //    //update
 //    Book updateBook(Book book);

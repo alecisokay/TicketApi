@@ -27,7 +27,15 @@ public class TicketController {
         ctx.status(201); //This is a status code that will tell us how things went
         ctx.result(ticketJson);
     };
+
+    // get pending
+
+
+
+    // get request by employee id use global
     //
+
+
 //    public Handler getBookByIdHandler = (ctx) ->{
 //        int id = Integer.parseInt(ctx.pathParam("id"));//This will take what value was in the {id} and turn it into an int for us to use
 //        Book book = Driver.bookService.getBookById(id);
@@ -44,6 +52,16 @@ public class TicketController {
         //ctx.result("this is the employee route");
     };
 //
+public Handler getEmployeeTickets = (ctx) ->{
+    //String email = Driver.currentLoggedEmployee.getEmail();
+    String email = "test@mail.com";
+    List<Ticket> ticket = Driver.ticketService.getTicketByEmail(email);
+    Gson gson = new Gson();
+    String json = gson.toJson(ticket);
+    ctx.result(json);
+    //ctx.result("this is the employee route");
+};
+
 //    public Handler updateBookHandler = (ctx) ->{
 //        String bookJSON = ctx.body();
 //        Gson gson = new Gson();

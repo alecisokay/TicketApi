@@ -11,6 +11,9 @@ public interface EmployeeService {
 
     Employee getEmployeeByEmailPassword(String email, String passwd);
 
+
+
+
     Employee getEmployeeByEmail(String email);
     // list all employees
     List<Employee> getAllEmployees();

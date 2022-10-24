@@ -10,6 +10,17 @@ import io.javalin.http.Handler;
 
 import java.util.List;
 
+
+class UserPass {
+    String email;
+    String passwd;
+
+    UserPass(String email, String passwd) {
+        this.email = email;
+        this.passwd = passwd;
+    }
+}
+
 public class EmployeeController {
 
 
@@ -48,6 +59,8 @@ public class EmployeeController {
         ctx.result(json);
         //ctx.result("this is the employee route");
     };
+
+
 //
 //    public Handler updateBookHandler = (ctx) ->{
 //        String bookJSON = ctx.body();
@@ -59,40 +72,47 @@ public class EmployeeController {
 //    };
 
    public Handler loginHandler = (ctx) ->{
-        String employeeJSON = ctx.body();
-        String email = "testUser@mail.com";
-        String passwd = "1234";
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(employeeJSON);
-        System.out.println(jsonNode.get("email"));
-        //String emails = jsonNode.findValue("email").textValue();
-        //String passwds = jsonNode.findValue("passwd").textValue();
-       System.out.println(email);
-       System.out.println(passwd);
+       if(Driver.currentLoggedEmployee == null) {
+           String employeeJSON = ctx.body();
 
-//       // creates an employee object from the Json we pass in from the ctx.body params
-//        Employee employee = gson.fromJson(employeeJSON, Employee.class);
-//
-//       // executes our login function (Book Updatabook = Employee loginEmployee function) -> employeeService.loginEmployee(employee)
-////        Book updateBook = Driver.bookService.updateBook(book);
-//       Employee checkEmployee = Driver.employeeService.getEmployeeByEmailPassword(employee);
-//       // makes a json string that is comprised of the result of the return value of out employeeService.loginEmployee(employee)
-////        String json = gson.toJson(updateBook);
-//       String json = gson.toJson(checkEmployee);
-//       ctx.result(json);
-       //System.out.println(email);
-       Employee employee = Driver.employeeService.getEmployeeByEmailPassword(email, passwd);
-       // creates Gson Object\
-       Gson gson = new Gson();
-       String json = gson.toJson(employee);
-       ctx.result(json);
+           Gson gsonUandP = new Gson();
+           UserPass userpass = gsonUandP.fromJson(employeeJSON, UserPass.class);
 
+           System.out.println(userpass.email);
+           System.out.println(userpass.passwd);
+           Employee employee = Driver.employeeService.getEmployeeByEmailPassword(userpass.email, userpass.passwd);
+           // creates Gson Object\
+           Gson gson = new Gson();
+           String json = gson.toJson(employee);
 
+           // check what this varibale is
+           Driver.currentLoggedEmployee = employee;
+           System.out.println(Driver.currentLoggedEmployee);
+
+           ctx.result(json);
+
+       }
+       else{ ctx.status(404);}
     };
 
 
-//
-//
+
+
+
+
+
+    //emply impl - get full user object by email/ id?
+
+    //  emply impl - checkEmailPass (email, pass)
+
+    //compare 1st object.getPass() == paramater password
+
+    // iff = do something
+    // else -> dont do something
+
+
+
+
 //    public Handler deleteBookHandler = (ctx) ->{
 //        int id = Integer.parseInt(ctx.pathParam("id"));
 //        boolean result = Driver.bookService.deleteBookById(id);
