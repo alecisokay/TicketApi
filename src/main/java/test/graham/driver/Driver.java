@@ -58,6 +58,7 @@ public class Driver {
         // view tickets
         app.get("/tickets", ticketController.getAllTickets); // check to see all tickets
         app.post("/tickets", ticketController.createTicket); // check to see all tickets
+        app.get("/mytickets", ticketController.getEmployeeTickets);
 
         // admin view pending tickets
 

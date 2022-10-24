@@ -13,6 +13,7 @@ public class TicketDAOPostgres implements TicketDAO{
     public Ticket createTicket(Ticket ticket) {
         // try with resources. This will create our connection and end the connection when the try block is over
         // or if something fails, it will end after the catch
+        System.out.println(ticket);
         try(Connection connection = ConnectionFactory.getConnection()){
             // Here is the unfun thing about JDBC, you have to write SQL statements in Java
             // I recommend putting in comments the SQL command you are trying to execute
@@ -76,6 +77,7 @@ public class TicketDAOPostgres implements TicketDAO{
 
     @Override
     public List<Ticket> getTicketByEmail(String email) {
+        System.out.println(email);
         try(Connection connection = ConnectionFactory.getConnection()){
             String sql = "select * from tickets where createdBy = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -84,7 +86,7 @@ public class TicketDAOPostgres implements TicketDAO{
 
             System.out.println(email);
             ResultSet rs = ps.executeQuery();
-            rs.next();
+            //rs.next();
 
             List<Ticket> ticketList = new ArrayList();
 
