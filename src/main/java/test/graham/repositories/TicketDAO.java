@@ -10,11 +10,17 @@ public interface TicketDAO{
     //create
     Ticket createTicket(Ticket ticket);
 
+    Ticket getTicketById(int id);
+
+    Ticket updateTicket(Ticket ticket);
+
+
     //
 //    //read
 //    Book getBookById(int id);
 //    List<Book> getAllBooks();
     List<Ticket> getAllTickets();
+    List<Ticket> getAllPendingTickets();
 
     List<Ticket> getTicketByEmail(String email);
 //

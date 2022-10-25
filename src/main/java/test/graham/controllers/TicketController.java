@@ -7,18 +7,21 @@ import test.graham.entities.Ticket;
 
 import java.util.List;
 
+class TicketId {
+    int id;
+    String approvedBy;
+    String decision;
+
+    public TicketId(int id, String approvedBy, String decision) {
+        this.id = id;
+        this.approvedBy = approvedBy;
+        this.decision = decision;
+    }
+}
+
 public class TicketController {
-    // These controllers and using what is called Lambdas
-//    public Handler createBook = (ctx) ->{
-//        String json = ctx.body();
-//        Gson gson = new Gson();
-//        Book book = gson.fromJson(json, Book.class);
-//        Book registeredBook = Driver.bookService.createBook(book);
-//        String bookJson = gson.toJson(registeredBook);
-//        ctx.status(201); //This is a status code that will tell us how things went
-//        ctx.result(bookJson);
-//    };
-    public Handler createTicket = (ctx) ->{
+
+    public Handler createTicket = (ctx) -> {
         String json = ctx.body();
         Gson gson = new Gson();
         Ticket ticket = gson.fromJson(json, Ticket.class);
@@ -29,58 +32,48 @@ public class TicketController {
     };
 
     // get pending
+    public Handler getAllPendingTickets = (ctx) -> {
+        if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
+            List<Ticket> ticket = Driver.ticketService.getAllPendingTickets();
+            Gson gson = new Gson();
+            String json = gson.toJson(ticket);
+            ctx.result(json);
+        } else {
+            ctx.status(400);
+            ctx.result("you are not admin bro");
+            System.out.println("you are not admin bro");
+        }
+    };
 
 
-
-    // get request by employee id use global
-    //
-
-
-//    public Handler getBookByIdHandler = (ctx) ->{
-//        int id = Integer.parseInt(ctx.pathParam("id"));//This will take what value was in the {id} and turn it into an int for us to use
-//        Book book = Driver.bookService.getBookById(id);
-//        Gson gson = new Gson();
-//        String json = gson.toJson(book);
-//        ctx.result(json);
-//    };
-//
-    public Handler getAllTickets = (ctx) ->{
+    public Handler getAllTickets = (ctx) -> {
         List<Ticket> ticket = Driver.ticketService.getAllTickets();
         Gson gson = new Gson();
         String json = gson.toJson(ticket);
         ctx.result(json);
         //ctx.result("this is the employee route");
     };
-//
-public Handler getEmployeeTickets = (ctx) ->{
-    //String email = Driver.currentLoggedEmployee.getEmail();
-    String email = "test@mail.com";
-    List<Ticket> ticket = Driver.ticketService.getTicketByEmail(email);
-    Gson gson = new Gson();
-    String json = gson.toJson(ticket);
-    ctx.result(json);
-    //ctx.result("this is the employee route");
-};
+    //
+    public Handler getEmployeeTickets = (ctx) -> {
+        String email = Driver.currentLoggedEmployee.getEmail();
+        //String email = "test@mail.com";
+        List<Ticket> ticket = Driver.ticketService.getTicketByEmail(email);
+        Gson gson = new Gson();
+        String json = gson.toJson(ticket);
+        ctx.result(json);
+        //ctx.result("this is the employee route");
+    };
 
-//    public Handler updateBookHandler = (ctx) ->{
-//        String bookJSON = ctx.body();
-//        Gson gson = new Gson();
-//        Book book = gson.fromJson(bookJSON, Book.class);
-//        Book updateBook = Driver.bookService.updateBook(book);
-//        String json = gson.toJson(updateBook);
-//        ctx.result(json);
-//    };
-//
-//
-//    public Handler deleteBookHandler = (ctx) ->{
-//        int id = Integer.parseInt(ctx.pathParam("id"));
-//        boolean result = Driver.bookService.deleteBookById(id);
-//        if(result){
-//            ctx.status(204);
-//        }
-//        else{
-//            ctx.status(400);
-//            ctx.result("Could not process your delete request");
-//        }
-//    };
+
+    public Handler updateTicket = (ctx) -> {
+        String ticketJSON = ctx.body();
+        Gson gson = new Gson();
+        TicketId ticketId = gson.fromJson(ticketJSON, TicketId.class);
+        Ticket ticket = Driver.ticketService.updatePendingTicket(ticketId.approvedBy, ticketId.id, ticketId.decision);
+        Driver.ticketService.updateTicket(ticket);
+        System.out.println(ticket);
+
+        String json = gson.toJson(ticket);
+        ctx.result(json);
+    };
 }

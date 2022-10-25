@@ -46,10 +46,93 @@ public class TicketDAOPostgres implements TicketDAO{
     }
 
     @Override
+    public Ticket getTicketById(int id) {
+        try(Connection connection = ConnectionFactory.getConnection()){
+            //String sql = "select * from books where id = ?";
+            String sql = "select * from tickets where id = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            // The class PreparedStatement has a method called prepareStatement (no d) that takes in a string
+            ps.setInt(1, id);
+
+            System.out.println(id);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+
+            // if passwd == employee.getPasswd{};
+            Ticket ticket = new Ticket();
+            ticket.setId(rs.getInt("id"));
+            ticket.setDescription(rs.getString("description"));
+            ticket.setCreatedBy(rs.getString("createdBy"));
+            ticket.setApprovedBy(rs.getString("approvedBy"));
+            ticket.setAmount(rs.getInt("amount"));
+            ticket.setStatus(rs.getInt("status"));
+
+
+            return ticket;
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            System.out.println("something went wrong looking for ticket");
+            return null;
+        }
+    }
+
+    @Override
+    public Ticket updateTicket(Ticket ticket) {
+        try(Connection connection = ConnectionFactory.getConnection()){
+            String sql = "update tickets set approvedBy = ?, status = ? where id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, ticket.getApprovedBy());
+            preparedStatement.setInt(2, ticket.getStatus());
+            preparedStatement.setInt(3, ticket.getId());
+
+            preparedStatement.executeUpdate();
+            return ticket;
+        }
+        catch (SQLException e){
+            System.out.println("there was an error updating the ticket");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
     public List<Ticket> getAllTickets() {
         //return null;
         try(Connection connection = ConnectionFactory.getConnection()){
             String sql = "select * from tickets";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            ResultSet rs = preparedStatement.executeQuery();
+
+            List<Ticket> ticketList = new ArrayList();
+
+            while(rs.next()){
+                Ticket ticket = new Ticket();
+                ticket.setId(rs.getInt("id"));
+                ticket.setDescription(rs.getString("description"));
+                ticket.setCreatedBy(rs.getString("createdBy"));
+                ticket.setApprovedBy(rs.getString("approvedBy"));
+                ticket.setAmount(rs.getInt("amount"));
+                ticket.setStatus(rs.getInt("status"));
+                ticketList.add(ticket);
+            }
+            return ticketList;
+
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public List<Ticket> getAllPendingTickets() {
+        //return null;
+        try(Connection connection = ConnectionFactory.getConnection()){
+            String sql = "select * from tickets where status = 0";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             ResultSet rs = preparedStatement.executeQuery();

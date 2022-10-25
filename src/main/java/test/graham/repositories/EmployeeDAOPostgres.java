@@ -50,7 +50,6 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
     @Override
     public Employee getEmployeeByEmailPassword(String email, String passwd) {
         try(Connection connection = ConnectionFactory.getConnection()){
-            //String sql = "select * from books where id = ?";
             String sql = "select * from employee where email = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             // The class PreparedStatement has a method called prepareStatement (no d) that takes in a string

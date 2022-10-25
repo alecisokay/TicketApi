@@ -94,21 +94,14 @@ public class EmployeeController {
        }
        else{ ctx.status(404);}
     };
+    public Handler logout = (ctx) -> {
+        System.out.println("you logged out");
+        Driver.currentLoggedEmployee = null;
+        ctx.result("you successfully logged out");
+    };
 
 
 
-
-
-
-
-    //emply impl - get full user object by email/ id?
-
-    //  emply impl - checkEmailPass (email, pass)
-
-    //compare 1st object.getPass() == paramater password
-
-    // iff = do something
-    // else -> dont do something
 
 
 
