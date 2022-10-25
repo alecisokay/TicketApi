@@ -21,17 +21,25 @@ class TicketId {
 
 public class TicketController {
 
+
+    // create a new ticket if you are logged in
     public Handler createTicket = (ctx) -> {
-        String json = ctx.body();
-        Gson gson = new Gson();
-        Ticket ticket = gson.fromJson(json, Ticket.class);
-        Ticket registeredTicket = Driver.ticketService.createTicket(ticket);
-        String ticketJson = gson.toJson(registeredTicket);
-        ctx.status(201); //This is a status code that will tell us how things went
-        ctx.result(ticketJson);
+            if(Driver.currentLoggedEmployee == null) {
+            String json = ctx.body();
+            Gson gson = new Gson();
+            Ticket ticket = gson.fromJson(json, Ticket.class);
+            Ticket registeredTicket = Driver.ticketService.createTicket(ticket);
+            String ticketJson = gson.toJson(registeredTicket);
+            ctx.status(201); //This is a status code that will tell us how things went
+            ctx.result(ticketJson);}
+        else {
+            ctx.status(400);
+            ctx.result("please log in");
+            System.out.println("please log in");
+        }
     };
 
-    // get pending
+    // get pending tickets if you are admin
     public Handler getAllPendingTickets = (ctx) -> {
         if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
             List<Ticket> ticket = Driver.ticketService.getAllPendingTickets();
@@ -45,35 +53,46 @@ public class TicketController {
         }
     };
 
-
+    // this will show all tickets in the database, not for demo, this is debugging stuff
     public Handler getAllTickets = (ctx) -> {
         List<Ticket> ticket = Driver.ticketService.getAllTickets();
         Gson gson = new Gson();
         String json = gson.toJson(ticket);
         ctx.result(json);
-        //ctx.result("this is the employee route");
     };
-    //
+
+    // check your tickets
     public Handler getEmployeeTickets = (ctx) -> {
+        if(Driver.currentLoggedEmployee == null) {
         String email = Driver.currentLoggedEmployee.getEmail();
         //String email = "test@mail.com";
         List<Ticket> ticket = Driver.ticketService.getTicketByEmail(email);
         Gson gson = new Gson();
         String json = gson.toJson(ticket);
-        ctx.result(json);
-        //ctx.result("this is the employee route");
+        ctx.result(json);}
+        else {
+            ctx.status(400);
+            ctx.result("You are not logged in");
+            System.out.println("you are not logged in");
+
+        }
     };
 
-
+    // update Ticket as admin
     public Handler updateTicket = (ctx) -> {
-        String ticketJSON = ctx.body();
-        Gson gson = new Gson();
-        TicketId ticketId = gson.fromJson(ticketJSON, TicketId.class);
-        Ticket ticket = Driver.ticketService.updatePendingTicket(ticketId.approvedBy, ticketId.id, ticketId.decision);
-        Driver.ticketService.updateTicket(ticket);
-        System.out.println(ticket);
-
-        String json = gson.toJson(ticket);
-        ctx.result(json);
+        if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
+            String ticketJSON = ctx.body();
+            Gson gson = new Gson();
+            TicketId ticketId = gson.fromJson(ticketJSON, TicketId.class);
+            Ticket ticket = Driver.ticketService.updatePendingTicket(ticketId.approvedBy, ticketId.id, ticketId.decision);
+            Driver.ticketService.updateTicket(ticket);
+            System.out.println(ticket);
+            String json = gson.toJson(ticket);
+            ctx.result(json);}
+        else {
+            ctx.status(400);
+            ctx.result("You are not authorized to access this");
+            System.out.println("you are not authorized to access this");
+        }
     };
 }
