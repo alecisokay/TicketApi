@@ -41,15 +41,22 @@ public class TicketController {
 
     // get pending tickets if you are admin
     public Handler getAllPendingTickets = (ctx) -> {
-        if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
-            List<Ticket> ticket = Driver.ticketService.getAllPendingTickets();
-            Gson gson = new Gson();
-            String json = gson.toJson(ticket);
-            ctx.result(json);
-        } else {
+        try {
+            System.out.println(Driver.currentLoggedEmployee.getIsAdmin());
+            if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
+                List<Ticket> ticket = Driver.ticketService.getAllPendingTickets();
+                Gson gson = new Gson();
+                String json = gson.toJson(ticket);
+                ctx.result(json);
+            }
+            else{
+                ctx.result("you are not authorized to do this action");
+
+            }
+        } catch (Exception e) {
             ctx.status(400);
-            ctx.result("you are not admin bro");
-            System.out.println("you are not admin bro");
+            ctx.result("you are not authorized to do this action");
+            System.out.println("you are not authorized to do this action");
         }
     };
 
@@ -63,33 +70,36 @@ public class TicketController {
 
     // check your tickets
     public Handler getEmployeeTickets = (ctx) -> {
-        if(Driver.currentLoggedEmployee == null) {
-        String email = Driver.currentLoggedEmployee.getEmail();
-        //String email = "test@mail.com";
-        List<Ticket> ticket = Driver.ticketService.getTicketByEmail(email);
-        Gson gson = new Gson();
-        String json = gson.toJson(ticket);
-        ctx.result(json);}
-        else {
+        try {
+            if (Driver.currentLoggedEmployee == null) {
+                String email = Driver.currentLoggedEmployee.getEmail();
+                //String email = "test@mail.com";
+                List<Ticket> ticket = Driver.ticketService.getTicketByEmail(email);
+                Gson gson = new Gson();
+                String json = gson.toJson(ticket);
+                ctx.result(json);
+            }
+        } catch (Exception e){
             ctx.status(400);
-            ctx.result("You are not logged in");
-            System.out.println("you are not logged in");
-
+            ctx.result("You are not authorized to access this");
+            System.out.println("you are not authorized to access this");
         }
     };
 
     // update Ticket as admin
     public Handler updateTicket = (ctx) -> {
-        if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
-            String ticketJSON = ctx.body();
-            Gson gson = new Gson();
-            TicketId ticketId = gson.fromJson(ticketJSON, TicketId.class);
-            Ticket ticket = Driver.ticketService.updatePendingTicket(ticketId.approvedBy, ticketId.id, ticketId.decision);
-            Driver.ticketService.updateTicket(ticket);
-            System.out.println(ticket);
-            String json = gson.toJson(ticket);
-            ctx.result(json);}
-        else {
+        try {
+            if (Driver.currentLoggedEmployee.getIsAdmin() == 1) {
+                String ticketJSON = ctx.body();
+                Gson gson = new Gson();
+                TicketId ticketId = gson.fromJson(ticketJSON, TicketId.class);
+                Ticket ticket = Driver.ticketService.updatePendingTicket(ticketId.approvedBy, ticketId.id, ticketId.decision);
+                Driver.ticketService.updateTicket(ticket);
+                System.out.println(ticket);
+                String json = gson.toJson(ticket);
+                ctx.result(json);
+            }
+        } catch (Exception e ) {
             ctx.status(400);
             ctx.result("You are not authorized to access this");
             System.out.println("you are not authorized to access this");

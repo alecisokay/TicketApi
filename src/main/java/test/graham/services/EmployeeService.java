@@ -9,7 +9,7 @@ public interface EmployeeService {
 
     //
 
-    Employee getEmployeeByEmailPassword(String email, String passwd);
+    Employee getEmployeeByEmailPassword(Employee employee);
 
 
 

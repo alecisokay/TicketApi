@@ -1,6 +1,7 @@
 package test.graham.services;
 
 import test.graham.entities.Employee;
+import test.graham.exceptions.UserTakenException;
 import test.graham.repositories.EmployeeDAO;
 import java.util.List;
 import java.util.Objects;
@@ -22,16 +23,16 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee getEmployeeByEmailPassword(String email, String passwd) {
-        Employee employee = this.employeeDAO.getEmployeeByEmail(email);
+    public Employee getEmployeeByEmailPassword(Employee employee) {
+        Employee employees = this.employeeDAO.getEmployeeByEmail(employee.getEmail());
         // compare the stdout values
+        System.out.println(employees.getPasswd());
         System.out.println(employee.getPasswd());
-        System.out.println(passwd);
 
         /////
-        if(Objects.equals(employee.getPasswd(), passwd)){
+        if(Objects.equals(employees.getPasswd(), employee.getPasswd())){
             System.out.println("equals!");
-            return employee;
+            return employees;
         }
         else {
             System.out.println("passwords did not match");
@@ -39,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService{
         return null;
     }
 
-
+// get employee by username; if not null; then
     @Override
     public Employee getEmployeeByEmail(String email) {
         return this.employeeDAO.getEmployeeByEmail(email);

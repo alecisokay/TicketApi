@@ -3,17 +3,20 @@ package test.graham.controllers;
 import com.google.gson.Gson;
 import test.graham.driver.Driver;
 import test.graham.entities.Employee;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.javalin.http.Handler;
 
+
+import io.javalin.http.Handler;
+import test.graham.exceptions.UserTakenException;
+
+import java.sql.SQLException;
 import java.util.List;
 
 
 class UserPass {
     String email;
     String passwd;
+
+
 
     UserPass(String email, String passwd) {
         this.email = email;
@@ -25,13 +28,25 @@ public class EmployeeController {
 
 
     public Handler createUser = (ctx) ->{
-        String json = ctx.body();
-        Gson gson = new Gson();
-        Employee employee = gson.fromJson(json, Employee.class);
-        Employee registeredEmployee = Driver.employeeService.createEmployee(employee);
-        String employeeJson = gson.toJson(registeredEmployee);
-        ctx.status(201); //This is a status code that will tell us how things went
-        ctx.result(employeeJson);
+        try {
+            String json = ctx.body();
+            Gson gson = new Gson();
+            Employee employee = gson.fromJson(json, Employee.class);
+            Employee registeredEmployee = Driver.employeeService.createEmployee(employee);
+            String employeeJson = gson.toJson(registeredEmployee);
+            ctx.status(201); //This is a status code that will tell us how things went
+            ctx.result(employeeJson);
+        }
+        catch (UserTakenException e) {
+            // check correct error code
+            ctx.status(400);
+            ctx.result("this user was already taken");
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            ctx.result("there was an issue creating user");
+        }
     };
 
 
@@ -46,33 +61,49 @@ public class EmployeeController {
 
 
     // login
-   public Handler loginHandler = (ctx) ->{
-       if(Driver.currentLoggedEmployee == null) {
-           String employeeJSON = ctx.body();
+   public Handler loginHandler = (ctx) -> {
+        //System.out.println("login handler fired");
+        //System.out.println(Driver.currentLoggedEmployee);
 
-           Gson gsonUandP = new Gson();
-           UserPass userpass = gsonUandP.fromJson(employeeJSON, UserPass.class);
+        if (Driver.currentLoggedEmployee == null) {
+            try {
+                String employeeJSON = ctx.body();
 
-           System.out.println(userpass.email);
-           System.out.println(userpass.passwd);
-           Employee employee = Driver.employeeService.getEmployeeByEmailPassword(userpass.email, userpass.passwd);
-           Gson gson = new Gson();
-           String json = gson.toJson(employee);
+                Gson gsonUandP = new Gson();
+                Employee userpass = gsonUandP.fromJson(employeeJSON, Employee.class);
 
-           // check what this varibale is
-           Driver.currentLoggedEmployee = employee;
-           System.out.println(Driver.currentLoggedEmployee);
-           ctx.result(json);
+                Employee employee = Driver.employeeService.getEmployeeByEmailPassword(userpass);
+                Gson gson = new Gson();
+                String json = gson.toJson(employee);
+                if(employee == null) {
+                    ctx.result("your password was incorrect");
+                }
+                else{
+                    Driver.currentLoggedEmployee = employee;
+                    System.out.println(Driver.currentLoggedEmployee);
+                    ctx.result(json);
+                }
+            }
+         catch(Exception e){
+            ctx.status(401);
+            ctx.result("an error occured");
+        }
+    }
+        else{
+            ctx.status(401);
+            ctx.result("you are already logged in");
+        }
+   };
 
-       }
-       else{
-           ctx.status(404);
-           ctx.result("you are logged in already");
-       }
-    };
     public Handler logout = (ctx) -> {
-        System.out.println("you logged out");
-        Driver.currentLoggedEmployee = null;
-        ctx.result("you successfully logged out");
+        if (Driver.currentLoggedEmployee != null){
+            //System.out.println("you logged out");
+            Driver.currentLoggedEmployee = null;
+            //System.out.println(Driver.currentLoggedEmployee);
+            ctx.result("you successfully logged out");
+        }
+        else{
+            ctx.result("you arent logged in");
+        }
     };
 }

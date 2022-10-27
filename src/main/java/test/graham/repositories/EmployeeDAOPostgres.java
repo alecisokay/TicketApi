@@ -2,6 +2,7 @@ package test.graham.repositories;
 
 import test.graham.entities.Book;
 import test.graham.entities.Employee;
+import test.graham.exceptions.UserTakenException;
 import test.graham.util.ConnectionFactory;
 
 import java.sql.*;
@@ -40,23 +41,26 @@ public class EmployeeDAOPostgres implements EmployeeDAO{
             return employee;
         }
         catch (SQLException e){
+
             e.printStackTrace();
+            throw new UserTakenException("this si the usertakenex in DAOpostgres");
+
         }
-        return null;
+//        return null;
     }
 
 
 
     @Override
-    public Employee getEmployeeByEmailPassword(String email, String passwd) {
+    public Employee getEmployeeByEmailPassword(Employee employees) {
         try(Connection connection = ConnectionFactory.getConnection()){
             String sql = "select * from employee where email = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             // The class PreparedStatement has a method called prepareStatement (no d) that takes in a string
-            ps.setString(1, email);
+            ps.setString(1, employees.getEmail());
 
-            System.out.println(email);
-            System.out.println(passwd);
+            //System.out.println(email);
+            //System.out.println(passwd);
             ResultSet rs = ps.executeQuery();
             rs.next();
 

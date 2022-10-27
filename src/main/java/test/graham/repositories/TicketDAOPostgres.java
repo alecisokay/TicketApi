@@ -1,6 +1,7 @@
 package test.graham.repositories;
 
 import test.graham.entities.Employee;
+import test.graham.entities.Status;
 import test.graham.entities.Ticket;
 import test.graham.util.ConnectionFactory;
 
@@ -18,7 +19,7 @@ public class TicketDAOPostgres implements TicketDAO{
             // Here is the unfun thing about JDBC, you have to write SQL statements in Java
             // I recommend putting in comments the SQL command you are trying to execute
             //INSERT INTO tickets VALUES (DEFAULT, 'descriptin', 'createdBy', 'appvrovedBy', amount, status);
-            String sql = "insert into tickets values(default, ?, ? , ?, ?, ?)";
+            String sql = "insert into tickets values(default, ?, ? , ?, ?, ?, ?)";
             // The only thing in the sql String that isnt "just a string" are the question marks
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             // We use Return generated Keys, to get back the primary key of our newly created book
@@ -27,7 +28,10 @@ public class TicketDAOPostgres implements TicketDAO{
             preparedStatement.setString(2, ticket.getCreatedBy());
             preparedStatement.setString(3, ticket.getApprovedBy());
             preparedStatement.setInt(4, ticket.getAmount());
-            preparedStatement.setInt(5, ticket.getStatus());
+            //
+            System.out.println(Status.APPROVED.name());
+            preparedStatement.setString(5, Status.PENDING.name());
+            preparedStatement.setBoolean(6, ticket.getChanged());
 
             preparedStatement.execute();
 
@@ -65,7 +69,8 @@ public class TicketDAOPostgres implements TicketDAO{
             ticket.setCreatedBy(rs.getString("createdBy"));
             ticket.setApprovedBy(rs.getString("approvedBy"));
             ticket.setAmount(rs.getInt("amount"));
-            ticket.setStatus(rs.getInt("status"));
+            ticket.setStatus(Status.valueOf(rs.getString("status")));
+            ticket.setChanged(rs.getBoolean("isChanged"));
 
 
             return ticket;
@@ -81,12 +86,14 @@ public class TicketDAOPostgres implements TicketDAO{
     @Override
     public Ticket updateTicket(Ticket ticket) {
         try(Connection connection = ConnectionFactory.getConnection()){
-            String sql = "update tickets set approvedBy = ?, status = ? where id = ?";
+            String sql = "update tickets set approvedBy = ?, status = ?, isChanged = ? where id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             preparedStatement.setString(1, ticket.getApprovedBy());
-            preparedStatement.setInt(2, ticket.getStatus());
-            preparedStatement.setInt(3, ticket.getId());
+            //
+            preparedStatement.setString(2, Status.PENDING.name());
+            preparedStatement.setBoolean(3, ticket.getChanged());
+            preparedStatement.setInt(4, ticket.getId());
 
             preparedStatement.executeUpdate();
             return ticket;
@@ -116,7 +123,10 @@ public class TicketDAOPostgres implements TicketDAO{
                 ticket.setCreatedBy(rs.getString("createdBy"));
                 ticket.setApprovedBy(rs.getString("approvedBy"));
                 ticket.setAmount(rs.getInt("amount"));
-                ticket.setStatus(rs.getInt("status"));
+                ticket.setStatus(Status.valueOf(rs.getString("status")));
+                ticket.setChanged(rs.getBoolean("isChanged"));
+                //  create Enum
+                //ticket.setStatus(rs.getInt("status"));
                 ticketList.add(ticket);
             }
             return ticketList;
@@ -132,7 +142,7 @@ public class TicketDAOPostgres implements TicketDAO{
     public List<Ticket> getAllPendingTickets() {
         //return null;
         try(Connection connection = ConnectionFactory.getConnection()){
-            String sql = "select * from tickets where status = 0";
+            String sql = "select * from tickets where status = 'PENDING'";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
             ResultSet rs = preparedStatement.executeQuery();
@@ -146,7 +156,8 @@ public class TicketDAOPostgres implements TicketDAO{
                 ticket.setCreatedBy(rs.getString("createdBy"));
                 ticket.setApprovedBy(rs.getString("approvedBy"));
                 ticket.setAmount(rs.getInt("amount"));
-                ticket.setStatus(rs.getInt("status"));
+                ticket.setStatus(Status.valueOf(rs.getString("status")));
+                ticket.setChanged(rs.getBoolean("isChanged"));
                 ticketList.add(ticket);
             }
             return ticketList;
@@ -180,7 +191,10 @@ public class TicketDAOPostgres implements TicketDAO{
                 ticket.setCreatedBy(rs.getString("createdBy"));
                 ticket.setApprovedBy(rs.getString("approvedBy"));
                 ticket.setAmount(rs.getInt("amount"));
-                ticket.setStatus(rs.getInt("status"));
+                ticket.setStatus(Status.valueOf(rs.getString("status")));
+                ticket.setChanged(rs.getBoolean("isChanged"));
+                //  change the Enum
+                //ticket.setStatus(rs.getInt("status"));
                 ticketList.add(ticket);
             }
             return ticketList;

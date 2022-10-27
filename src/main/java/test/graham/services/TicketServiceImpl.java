@@ -22,14 +22,21 @@ public class TicketServiceImpl implements TicketService{
 
     @Override
     public Ticket updatePendingTicket(String approvedBy, int id, String decision) {
-        Ticket ticket = this.ticketDAO.getTicketById(id);
+        try {
+            Ticket ticket = this.ticketDAO.getTicketById(id);
 
-        ticket.setApprovedBy(approvedBy);
-        int result = (decision == "approved")? 1 : 2;
-        ticket.setStatus(result);
+            ticket.setApprovedBy(approvedBy);
+//            String result = (decision == ticket.getStatus().name()) ? "APPROVED"  : "DENIED";
+//            ticket.setStatus(result);
 
-        Ticket ticketUpdate = this.ticketDAO.updateTicket(ticket);
-        return ticketUpdate;
+
+            Ticket ticketUpdate = this.ticketDAO.updateTicket(ticket);
+            return ticketUpdate;
+        }
+        catch (Exception e) {
+            System.out.println("you cannot reverse a decision");
+            throw new RuntimeException("you cannot reverse a decision");
+        }
     }
 
     @Override

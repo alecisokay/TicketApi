@@ -14,7 +14,7 @@ public interface EmployeeDAO {
 
 //
 //    //read
-    Employee getEmployeeByEmailPassword(String email, String passwd);
+    Employee getEmployeeByEmailPassword(Employee employee);
 
     Employee getEmployeeByEmail(String email);
     List<Employee> getAllEmployees();
