@@ -19,6 +19,13 @@ public class Employee {
         this.passwd = passwd;
     }
 
+    public Employee(String fname, String lname, String email, String passwd, int isAdmin) {
+        this.fname = fname;
+        this.lname = lname;
+        this.email = email;
+        this.passwd = passwd;
+        this.isAdmin = isAdmin;
+    }
 
     public Employee(int id, String fname, String lname, String email, String passwd, int isAdmin) {
         this.id = id;

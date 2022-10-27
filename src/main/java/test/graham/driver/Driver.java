@@ -3,14 +3,12 @@ package test.graham.driver;
 import test.graham.controllers.EmployeeController;
 import test.graham.controllers.TicketController;
 import test.graham.entities.Employee;
-import test.graham.repositories.BookDAOPostgres;
 import test.graham.repositories.EmployeeDAOPostgres;
 import test.graham.repositories.TicketDAOPostgres;
 import test.graham.services.*;
 import io.javalin.Javalin;
 
 public class Driver {
-    public static BookService bookService = new BookServiceImpl(new BookDAOPostgres());
     public static EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOPostgres());
     public static TicketService ticketService = new TicketServiceImpl(new TicketDAOPostgres());
     public static Employee currentLoggedEmployee = null;

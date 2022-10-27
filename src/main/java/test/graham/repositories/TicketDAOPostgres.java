@@ -65,8 +65,7 @@ public class TicketDAOPostgres implements TicketDAO{
             ResultSet rs = ps.executeQuery();
             rs.next();
 
-            //System.out.println(Status.PENDING);
-            // if passwd == employee.getPasswd{};
+
             Ticket ticket = new Ticket();
             ticket.setId(rs.getInt("id"));
             ticket.setDescription(rs.getString("description"));
@@ -93,10 +92,11 @@ public class TicketDAOPostgres implements TicketDAO{
         try(Connection connection = ConnectionFactory.getConnection()){
             String sql = "update tickets set approvedBy = ?, status = ?, isChanged = ? where id = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            String status = String.valueOf(ticket.getStatus());
 
             preparedStatement.setString(1, ticket.getApprovedBy());
             //
-            preparedStatement.setString(2, Status.PENDING.name());
+            preparedStatement.setString(2, status);
             preparedStatement.setBoolean(3, ticket.getChanged());
             preparedStatement.setInt(4, ticket.getId());
 

@@ -1,9 +1,15 @@
 package test.graham.repositories;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+import org.postgresql.util.PSQLException;
 import test.graham.entities.Employee;
 
+import java.sql.Connection;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +19,15 @@ class EmployeeDAOPostgresTest {
 
     static EmployeeDAO employeeDAO = new EmployeeDAOPostgres();
 
+
+
     @Test
     void create_employee_test() {
-        Employee newEmployee = new Employee(0, "Harry", "Potter", "newEmail@mail.com", "12345", 0);
+        Employee newEmployee = new Employee("Harry", "Potter", "test3Email@mail.com", "12345", 0);
         Employee savedEmployee = employeeDAO.createEmployee(newEmployee);
-        Assertions.assertEquals(savedEmployee.getFname(), "Harry");
+        //System.out.println(savedEmployee);
+        //Assertions.assertEquals(savedEmployee.getFname(), "Harry");
+        //Assertions.assertNull(savedEmployee);
     }
 
     @Test
@@ -39,4 +49,5 @@ class EmployeeDAOPostgresTest {
         Assertions.assertTrue(newList.size()>0);
 
     }
+
 }

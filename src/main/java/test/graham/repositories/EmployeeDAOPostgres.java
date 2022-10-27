@@ -1,6 +1,5 @@
 package test.graham.repositories;
 
-import test.graham.entities.Book;
 import test.graham.entities.Employee;
 import test.graham.exceptions.UserTakenException;
 import test.graham.util.ConnectionFactory;
