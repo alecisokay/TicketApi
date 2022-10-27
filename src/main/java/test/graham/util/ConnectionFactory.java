@@ -32,7 +32,7 @@ public class ConnectionFactory {
 
         //the url to my database schema
         // THE ONLY THINGS YOU MIGHT have to change is the PORT and the schema (maybe database if yours isnt called postgres for some reason)
-        String url = "jdbc:postgresql://localhost:5432/mydb?currentSchema=tickets";
+        String url = "jdbc:postgresql://localhost:5432/postgres?currentSchema=tickets";
         //                                         ^ port  ^database               ^ schema
         // Something to keep in mind in regards to your postgres database and schema, DONT USE SPACES OR Slashes or UNDERSCORES or Capitals
         //Your Postgres username

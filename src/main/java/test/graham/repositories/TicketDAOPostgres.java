@@ -19,19 +19,19 @@ public class TicketDAOPostgres implements TicketDAO{
             // Here is the unfun thing about JDBC, you have to write SQL statements in Java
             // I recommend putting in comments the SQL command you are trying to execute
             //INSERT INTO tickets VALUES (DEFAULT, 'descriptin', 'createdBy', 'appvrovedBy', amount, status);
-            String sql = "insert into tickets values(default, ?, ? , ?, ?, ?, ?)";
+            String sql = "insert into tickets values(default, ?, ? , default, ?, default, default)";
             // The only thing in the sql String that isnt "just a string" are the question marks
             PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             // We use Return generated Keys, to get back the primary key of our newly created book
             //Parameters START at 1, they are not indexed at 0
             preparedStatement.setString(1, ticket.getDescription());
             preparedStatement.setString(2, ticket.getCreatedBy());
-            preparedStatement.setString(3, ticket.getApprovedBy());
-            preparedStatement.setInt(4, ticket.getAmount());
+            //preparedStatement.setString(3, ticket.getApprovedBy());
+            preparedStatement.setInt(3, ticket.getAmount());
             //
             System.out.println(Status.APPROVED.name());
-            preparedStatement.setString(5, Status.PENDING.name());
-            preparedStatement.setBoolean(6, ticket.getChanged());
+            //preparedStatement.setString(5, Status.PENDING.name());
+            //preparedStatement.setBoolean(6, ticket.getChanged());
 
             preparedStatement.execute();
 
@@ -62,6 +62,7 @@ public class TicketDAOPostgres implements TicketDAO{
             ResultSet rs = ps.executeQuery();
             rs.next();
 
+            //System.out.println(Status.PENDING);
             // if passwd == employee.getPasswd{};
             Ticket ticket = new Ticket();
             ticket.setId(rs.getInt("id"));
@@ -69,6 +70,7 @@ public class TicketDAOPostgres implements TicketDAO{
             ticket.setCreatedBy(rs.getString("createdBy"));
             ticket.setApprovedBy(rs.getString("approvedBy"));
             ticket.setAmount(rs.getInt("amount"));
+            //ticket.setStatus(rs.getString("status"));
             ticket.setStatus(Status.valueOf(rs.getString("status")));
             ticket.setChanged(rs.getBoolean("isChanged"));
 

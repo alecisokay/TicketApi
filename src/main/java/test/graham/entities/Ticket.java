@@ -34,6 +34,13 @@ public class Ticket {
         this.isChanged = isChanged;
     }
 
+    public Ticket(int id, String approvedBy, Status status, Boolean isChanged) {
+        this.id = id;
+        this.approvedBy = approvedBy;
+        this.status = status;
+        this.isChanged = isChanged;
+    }
+
     @Override
     public String toString() {
         return "Ticket{" +

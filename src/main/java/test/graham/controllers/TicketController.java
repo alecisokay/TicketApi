@@ -24,19 +24,29 @@ public class TicketController {
 
     // create a new ticket if you are logged in
     public Handler createTicket = (ctx) -> {
-            if(Driver.currentLoggedEmployee == null) {
-            String json = ctx.body();
-            Gson gson = new Gson();
-            Ticket ticket = gson.fromJson(json, Ticket.class);
-            Ticket registeredTicket = Driver.ticketService.createTicket(ticket);
-            String ticketJson = gson.toJson(registeredTicket);
-            ctx.status(201); //This is a status code that will tell us how things went
-            ctx.result(ticketJson);}
+        System.out.println(Driver.currentLoggedEmployee);
+            if(Driver.currentLoggedEmployee != null) {
+                try {
+                    String json = ctx.body();
+                    Gson gson = new Gson();
+                    Ticket ticket = gson.fromJson(json, Ticket.class);
+                    Ticket registeredTicket = Driver.ticketService.createTicket(ticket);
+                    String ticketJson = gson.toJson(registeredTicket);
+                    ctx.status(201); //This is a status code that will tell us how things went
+                    ctx.result(ticketJson);
+                }
+                catch (Exception e){
+                    System.out.println(e);
+                    ctx.result("there was an error");
+                }
+            }
+
         else {
             ctx.status(400);
             ctx.result("please log in");
             System.out.println("please log in");
         }
+
     };
 
     // get pending tickets if you are admin
