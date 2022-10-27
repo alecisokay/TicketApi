@@ -3,6 +3,8 @@ package test.graham.repositories;
 import test.graham.entities.Employee;
 import test.graham.entities.Status;
 import test.graham.entities.Ticket;
+import test.graham.exceptions.TicketErrorException;
+import test.graham.exceptions.UserTakenException;
 import test.graham.util.ConnectionFactory;
 
 import java.sql.*;
@@ -45,8 +47,9 @@ public class TicketDAOPostgres implements TicketDAO{
         }
         catch (SQLException e){
             e.printStackTrace();
+            throw new TicketErrorException("you did not enter a description or amount");
         }
-        return null;
+
     }
 
     @Override

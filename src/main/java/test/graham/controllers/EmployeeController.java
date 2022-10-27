@@ -12,18 +12,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-class UserPass {
-    String email;
-    String passwd;
-
-
-
-    UserPass(String email, String passwd) {
-        this.email = email;
-        this.passwd = passwd;
-    }
-}
-
 public class EmployeeController {
 
 
@@ -75,6 +63,7 @@ public class EmployeeController {
                 Employee employee = Driver.employeeService.getEmployeeByEmailPassword(userpass);
                 Gson gson = new Gson();
                 String json = gson.toJson(employee);
+
                 if(employee == null) {
                     ctx.result("your password was incorrect");
                 }
@@ -86,7 +75,7 @@ public class EmployeeController {
             }
          catch(Exception e){
             ctx.status(401);
-            ctx.result("an error occured");
+            ctx.result("could not find user");
         }
     }
         else{

@@ -6,7 +6,7 @@ import java.util.List;
 public interface TicketService {
     Ticket createTicket(Ticket ticket);
 
-    Ticket updatePendingTicket(String approvedBy, int id, String decision);
+    Ticket updatePendingTicket(Ticket ticket);
 
     Ticket updateTicket(Ticket ticket);
 
