@@ -21,14 +21,14 @@ class EmployeeDAOPostgresTest {
 
 
 
-    @Test
-    void create_employee_test() {
-        Employee newEmployee = new Employee("Harry", "Potter", "test3Email@mail.com", "12345", 0);
-        Employee savedEmployee = employeeDAO.createEmployee(newEmployee);
-        //System.out.println(savedEmployee);
-        //Assertions.assertEquals(savedEmployee.getFname(), "Harry");
-        //Assertions.assertNull(savedEmployee);
-    }
+//    @Test
+//    void create_employee_test() {
+//        Employee newEmployee = new Employee("Harry", "Potter", "test3Email@mail.com", "12345", 0);
+//        Employee savedEmployee = employeeDAO.createEmployee(newEmployee);
+//        //System.out.println(savedEmployee);
+//        //Assertions.assertEquals(savedEmployee.getFname(), "Harry");
+//        //Assertions.assertNull(savedEmployee);
+//    }
 
     @Test
     void get_employee_by_email_password_test() {
